@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>teksanja_wp667 Database Schema</title>
+
+  <!-- GitHub Markdown & Mermaid Styling -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.0/github-markdown-light.min.css">
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "default" });
+  </script>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f9fafb;
+      color: #111;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    .markdown-body {
+      max-width: 980px;
+      width: 100%;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <article class="markdown-body">
+
+  <!-- Start Markdown -->
+  <h1>📦 teksanja_wp667 Database Schema</h1>
+
+  <p>
+    <img src="https://img.shields.io/badge/MariaDB-10.3.39-blue.svg?logo=mariadb&logoColor=white" />
+    <img src="https://img.shields.io/badge/PHP-7.2.30-777BB4.svg?logo=php&logoColor=white" />
+    <img src="https://img.shields.io/badge/phpMyAdmin-5.1.1-orange.svg?logo=phpmyadmin&logoColor=white" />
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" />
+    <img src="https://img.shields.io/badge/status-stable-brightgreen" />
+  </p>
+
+  <h2>🧩 Overview</h2>
+  <p>
+    The <strong>teksanja_wp667</strong> database represents a <strong>WordPress / WooCommerce Action Scheduler schema</strong> —
+    exported via phpMyAdmin. It is used by plugins like WooCommerce, WPForms, and AIOSEO to manage background and recurring tasks.
+  </p>
+
+  <ul>
+    <li>Cleaning up draft orders</li>
+    <li>Generating email summaries</li>
+    <li>Pruning SEO caches</li>
+    <li>Refreshing order count caches</li>
+  </ul>
+
+  <h2>🧭 Entity-Relationship (ER) Diagram</h2>
+  <div class="mermaid">
+    erDiagram
+        WPS2_ACTIONSCHEDULER_ACTIONS {
+            BIGINT action_id PK "Primary Key"
+            VARCHAR hook "Action hook name"
+            VARCHAR status "Action status (pending, complete, failed)"
+            DATETIME scheduled_date_gmt "Scheduled UTC"
+            DATETIME scheduled_date_local "Scheduled Local"
+            VARCHAR args "Encoded arguments"
+            LONGTEXT schedule "Serialized recurrence"
+            BIGINT group_id "Group reference"
+            INT attempts "Execution attempts"
+            DATETIME last_attempt_gmt "Last UTC attempt"
+            DATETIME last_attempt_local "Last Local attempt"
+            BIGINT claim_id "Claim reference"
+            VARCHAR extended_args "Extended metadata"
+            TINYINT priority "Priority order"
+        }
+        
+        WPS2_ACTIONSCHEDULER_GROUPS {
+            BIGINT group_id PK "Group Identifier"
+            VARCHAR slug "Group slug"
+            VARCHAR description "Group description"
+        }
+
+        WPS2_ACTIONSCHEDULER_CLAIMS {
+            BIGINT claim_id PK "Claim Identifier"
+            BIGINT worker_id "Worker reference"
+            DATETIME date_created "Claim creation timestamp"
+        }
+
+        WPS2_ACTIONSCHEDULER_LOGS {
+            BIGINT log_id PK "Log Identifier"
+            BIGINT action_id FK "Related action"
+            DATETIME log_date_gmt "Log date (UTC)"
+            LONGTEXT message "Execution message"
+        }
+
+        WPS2_ACTIONSCHEDULER_ACTIONS ||--o{ WPS2_ACTIONSCHEDULER_LOGS : "has many logs"
+        WPS2_ACTIONSCHEDULER_GROUPS ||--o{ WPS2_ACTIONSCHEDULER_ACTIONS : "contains actions"
+        WPS2_ACTIONSCHEDULER_CLAIMS ||--o{ WPS2_ACTIONSCHEDULER_ACTIONS : "claims actions"
+  </div>
+
+  <h2>⚙️ Environment Details</h2>
+  <ul>
+    <li>Database Engine: MariaDB 10.3.39</li>
+    <li>Interface: phpMyAdmin 5.1.1</li>
+    <li>PHP Version: 7.2.30</li>
+    <li>Export Date: October 23, 2025</li>
+  </ul>
+
+  <h2>🧑‍💻 Author</h2>
+  <p><strong>NB Mcube (Newcayen Maluleke)</strong><br>
+  📧 <a href="mailto:newcayen@teksaholdings.co.za">newcayen@teksaholdings.co.za</a><br>
+  🌐 <a href="https://teksaholdings.co.za">Teksaholdings.co.za</a></p>
+
+  <h2>🪪 License</h2>
+  <p>MIT License — free for personal and commercial use.</p>
+
+  </article>
+</body>
+</html>
